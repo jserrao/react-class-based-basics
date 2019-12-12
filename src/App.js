@@ -3,6 +3,8 @@ import './App.css';
 import styled from 'styled-components'
 
 // Styled component
+// You'll always just list them at the top like this
+// Don't forget to import
 const Base = styled.main`
   background-color: lightgray;
   padding: 25px 50px;
@@ -10,6 +12,9 @@ const Base = styled.main`
 `
 
 // Data
+// I just grabbed this data from the chuck norris joke machine
+// http://api.icndb.com/jokes/random/5
+// It kinda doesn't matter what data you use, just try stuff out
 const jokesArray = [
   {
       "id": 164,
@@ -40,13 +45,41 @@ const jokesArray = [
   }
 ]
 
+// Notice you can log stuff before you get into React
+// At this point your code is still outside of React
 console.log(jokesArray)
 
 // Component
+/**
+ * I want you to notice a couple things.
+ * App extends Component - but what does that mean?
+ * Component is React's idea of a component, the model for a component
+ * As such, you have to import from the React library (check line 1)
+ * When you make your 'App' class you are extending React's model
+ * This is called inheritance, so your custom App class gets React's component
+ * 
+ * So what 'ideas' do you get with Component?
+ * You implicitly get the idea of props and state
+ * Props are ways to pass data between components
+ * State is an object to house data you want to manipulate
+ * At a high-level, that's what you need to know to get going
+ */
 class App extends Component {
+  /* This constructor is like any other class-constructor in JS
+   * It brings the idea of the component from React into this class
+   */
   constructor(props) {
+    // Super instantiates the instance of this into the class
+    // And remember this just points at the class name
+    // This is a proxy for App
+    // Also note that super accepts the props information
+    // This allows it to have access to props passed from other components
     super(props)
 
+    // The state object builds off of the custom class' React component model
+    // This is available to all React components, but you have to set it up manually?
+    // This makes sense if you think about it - you have to put the data in there
+    // You can put whatever data types you need, but it's explicitly done
     this.state = {
       jokes: jokesArray,
       filteredJokes: [
@@ -58,10 +91,12 @@ class App extends Component {
     }
 
     // You always have to bind this to custom methods, so React can share the data with it
+    // This allows you methods to use the same scope
     this.activate = this.activate.bind(this)
     this.modifyJokes = this.modifyJokes.bind(this)
   }
 
+  // Super basic custom method, but it works.
   activate() {
     console.log("Please work!")
   }
@@ -70,6 +105,9 @@ class App extends Component {
     // Array methods???
     /**
      * .filter() 
+     * This one allows you to take an array and filter it down by it's children's properties
+     * In this case, we're taking our array of jokes and looking for ones with IDs lower than 200
+     * It creates a new array into smallJokes (only three jokes now)
      */
     const smallJokes = this.state.jokes.filter( (jokeObj) => {
       return jokeObj.id < 200
@@ -115,7 +153,8 @@ class App extends Component {
           )
         })}
 
-        <button onClick={ this.modifyJokes }> Trigger modifyJokes please! </button>
+        <button onClick={ this.modifyJokes }> Trigger modifyJokes() please! </button>
+        <button onClick={ this.activate }> Trigger activate() please! </button>
       </>
     )
   }
